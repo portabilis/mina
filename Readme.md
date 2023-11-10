@@ -1,11 +1,8 @@
 # Mina
 
-[![Code Climate](https://codeclimate.com/github/mina-deploy/mina/badges/gpa.svg)](https://codeclimate.com/github/mina-deploy/mina)
-[![Test Coverage](https://codeclimate.com/github/mina-deploy/mina/badges/coverage.svg)](https://codeclimate.com/github/mina-deploy/mina/coverage)
-[![Build Status](https://semaphoreci.com/api/v1/d4be4st/mina/branches/master/shields_badge.svg)](https://semaphoreci.com/d4be4st/mina)
 [![Gem Version](https://badge.fury.io/rb/mina.svg)](https://badge.fury.io/rb/mina)
 
-![mina](https://photos.infinum.co/store/5273935c5deeabda0e98c943db2a7ade)
+![mina](/docs/assets/images/mina.png?raw=true)
 
 Really fast deployer and server automation tool.
 
@@ -18,18 +15,17 @@ Mina works really fast because it's a deploy Bash script generator. It
 generates an entire procedure as a Bash script and runs it remotely in the
 server.
 
-Compare this to the likes of [Capistrano](https://github.com/capistrano/capistrano), where it opens an SSH connection and runs each command in sequence
-, Mina only creates a SSH session and sends *one* command.
+Compare this to the likes of [Capistrano](https://github.com/capistrano/capistrano), where it opens an SSH connection and runs each command in sequence, Mina only creates a SSH session and sends *one* command.
 
     $ gem install mina
     $ mina init
 
-Mina requires ruby 2.0.0 or greater. For older please use [0.3.8 version](https://github.com/mina-deploy/mina/blob/v0.3.8/)
+Mina requires ruby 2.0.0 or greater. For older versions of Ruby, please use [0.3.8 version](https://github.com/mina-deploy/mina/blob/v0.3.8/).
 
 Documentation
 ----------------
 
-For quick start check out [Getting starting guide](docs/getting_started.md)
+For quick start check out [Getting started guide](docs/getting_started.md)
 
 For migrating your current 0.3.x deploy scripts, please look at the [migrating guide](docs/migrating.md)
 
@@ -39,7 +35,7 @@ If you are missing some plugins check the [3rd party plugins doc](docs/3rd_party
 
 For other documentation please visit the [docs](docs)
 
-Licence
+License
 ----------------
 
 Released under the [MIT License](https://www.opensource.org/licenses/mit-license.php).
@@ -47,8 +43,8 @@ Released under the [MIT License](https://www.opensource.org/licenses/mit-license
 Credits
 ----------------
 
-Mina is maintained and sponsored by [Infinum](https://infinum.co).
+Mina is maintained and sponsored by [Infinum](https://infinum.com).
 
-You can reach us on twitter [Stef](https://twitter.com/_Beast_) & [Infinum](https://twitter.com/infinumco)
+You can reach us on twitter [Stef](https://twitter.com/_Beast_) & [Infinum](https://twitter.com/infinum).
 
-![](https://assets.infinum.co/assets/brand-logo-9e079bfa1875e17c8c1f71d1fee49cf0.svg) © 2016 Infinum.
+© 2021 Infinum

@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'mina/install'
 
 set :port, 22
@@ -32,27 +34,28 @@ end
 
 task :debug_configuration_variables do
   if fetch(:debug_configuration_variables)
-    puts
-    puts '------- Printing current config variables -------'
-    configuration.variables.each do |key, value|
-      puts "#{key.inspect} => #{value.inspect}"
+    puts '========== Configuration variables =========='
+    configuration.variables.each_key do |key|
+      puts "#{key.inspect} => #{fetch(key).inspect}"
     end
+    puts '========== Configuration variables =========='
+    puts
   end
 end
 
 desc 'Adds repo host to the known hosts'
 task :ssh_keyscan_repo do
   ensure!(:repository)
-  repo_host = fetch(:repository).split(%r{@|://}).last.split(%r{:|\/}).first
+  repo_host = fetch(:repository).split(%r{@|://}).last.split(%r{:|/}).first
   repo_port = /:([0-9]+)/.match(fetch(:repository)) && /:([0-9]+)/.match(fetch(:repository))[1] || '22'
 
-  next if repo_host == ""
+  next if repo_host == ''
 
-  command %{
+  command %(
     if ! ssh-keygen -H -F #{repo_host} &>/dev/null; then
       ssh-keyscan -t rsa -p #{repo_port} -H #{repo_host} >> ~/.ssh/known_hosts
     fi
-  }
+  )
 end
 
 desc 'Adds domain to the known hosts'
@@ -60,11 +63,11 @@ task :ssh_keyscan_domain do
   ensure!(:domain)
   ensure!(:port)
   run :local do
-    command %{
+    command %(
       if ! ssh-keygen -H -F #{fetch(:domain)} &>/dev/null; then
         ssh-keyscan -p #{fetch(:port)} #{fetch(:domain)} >> ~/.ssh/known_hosts
       fi
-    }
+    )
   end
 end
 
@@ -83,7 +86,11 @@ task :run, [:command] do |_, args|
   end
 end
 
-desc 'Open an ssh session to the server and cd to deploy_to folder'
+desc 'Open an SSH connection and position to :deploy_to folder'
 task :ssh do
-  exec %{#{Mina::Backend::Remote.new(nil).ssh} 'cd #{fetch(:deploy_to)} && exec $SHELL'}
+  ensure!(:deploy_to)
+
+  set :execution_mode, :exec
+
+  command "cd #{fetch(:deploy_to)} && exec $SHELL"
 end

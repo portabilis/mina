@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module Mina
   class Application < Rake::Application
     include Configuration::DSL
@@ -11,24 +13,27 @@ module Mina
       'mina'
     end
 
-    def run
+    # :nocov:
+    def run(*args)
       Rake.application = self
-      super
+      super(*args)
     end
+    # :nocov:
 
     def sort_options(options)
-      not_applicable_to_mina = %w(quiet silent verbose dry-run)
-      options.reject! do |(switch, *)|
-        switch =~ /--#{Regexp.union(not_applicable_to_mina)}/
-      end
+      options_not_applicable_to_mina = /--#{Regexp.union(['quiet', 'silent', 'verbose', 'dry-run'])}/
 
-      super.push(version, verbose, simulate, debug_configuration_variables, no_report_time)
+      mina_options = options.reject { |(switch, *)| switch =~ options_not_applicable_to_mina }
+      mina_options += [version, verbose, simulate, debug_configuration_variables, no_report_time]
+
+      super(mina_options)
     end
 
     def top_level_tasks
       return @top_level_tasks if @top_level_tasks.include?('init')
-      @top_level_tasks << :debug_configuration_variables
-      @top_level_tasks << :run_commands
+
+      @top_level_tasks << 'debug_configuration_variables'
+      @top_level_tasks << 'run_commands'
     end
 
     private
@@ -38,48 +43,53 @@ module Mina
     end
 
     def version
-      ['--version', '-V',
-       'Display the program version.',
-       lambda do |_value|
-         puts "Mina, version v#{Mina::VERSION}"
-         exit
-       end
+      [
+        '--version', '-V',
+        'Display the program version.',
+        lambda do |_value|
+          puts "Mina, version v#{Mina::VERSION}"
+          exit
+        end
       ]
     end
 
     def verbose
-      ['--verbose', '-v',
-       'Print more info',
-       lambda do |_value|
-         set(:verbose, true)
-       end
+      [
+        '--verbose', '-v',
+        'Print a command before its execution.',
+        lambda do |_value|
+          set(:verbose, true)
+        end
       ]
     end
 
     def simulate
-      ['--simulate', '-s',
-       'Do a simulate run without executing actions',
-       lambda do |_value|
-         set(:simulate, true)
-       end
+      [
+        '--simulate', '-s',
+        'Run a simulation. All commands will be printed but not executed.',
+        lambda do |_value|
+          set(:simulate, true)
+        end
       ]
     end
 
     def debug_configuration_variables
-      ['--debug-configuration-variables', '-d',
-       'Display the defined config variables before runnig the tasks.',
-       lambda do |_value|
-         set(:debug_configuration_variables, true)
-       end
+      [
+        '--debug-configuration-variables', '-d',
+        'Display configuration variables.',
+        lambda do |_value|
+          set(:debug_configuration_variables, true)
+        end
       ]
     end
 
     def no_report_time
-      ['--no-report-time', nil,
-       'Skip time reporting',
-       lambda do |_value|
-         set(:skip_report_time, true)
-       end
+      [
+        '--no-report-time', nil,
+        "Don't report execution time.",
+        lambda do |_value|
+          set(:skip_report_time, true)
+        end
       ]
     end
   end

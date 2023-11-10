@@ -1,13 +1,14 @@
+# frozen_string_literal: true
+
 require 'rake'
 Rake.application.options.trace = true
 
 # require 'pry'
-# require 'awesome_print'
 
 require 'forwardable'
 require 'shellwords'
 require 'singleton'
-require 'open4'
+require 'open3'
 
 require 'mina/version'
 require 'mina/helpers/output'
@@ -27,6 +28,6 @@ require 'mina/application'
 
 module Mina
   def self.root_path(*args)
-    File.join File.expand_path('../../', __FILE__), *args
+    File.join File.expand_path('..', __dir__), *args
   end
 end
